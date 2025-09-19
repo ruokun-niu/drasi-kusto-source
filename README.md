@@ -3,6 +3,8 @@ This repository contains an EXPERIMENTAL Kusto Source reactivator and proxy. It 
 
 The Kusto Source is not a typical Drasi Source as it relies on regularly polling the Kusto database for new changes. It should be treated as simply a prototype and should not be used in production environments. In addition, it is not using the Drasi Source SDK and its performance and scalability are highly limited.
 
+You may find some of the steps a bit tedious. This is because the Kusto Source is not an official Drasi Source. In an official Drasi Source, the Source SDK would handle a lot of the steps automatically.
+
 
 ## Using the Kusto Source
 
@@ -27,7 +29,6 @@ drasi apply -f source-provider.yaml
 
 ### Authentication
 
-#### Solution: Configure AKS and Fix the Authentication Issue
 Currently, the Kusto Source is configured to use a user-assigned managed identity for authentication. The following steps will guide you through the process of ensuring that the managed identity is correctly set up and that your AKS cluster can use it to authenticate with the Kusto database.
 
 ##### 1. Creating an User-Assigned Managed Identity
@@ -76,7 +77,7 @@ az identity federated-credential create \
 - `<federated-credential-name>`: A unique name (e.g., kusto-app-federated).
 - `<identity-name>`: The name of the user-assigned managed identity created earlier.
 
-##### 4. Update Your Kubernetes Deployment
+##### 4. Update Your Kubernetes SA
 **NOTE**: In an official Drasi Source, the Source SDK would handle this. This is a workaround for this experimental Kusto Source.
 
 Your application pod needs a service account configured with workload identity annotations. Here's an updated deployment YAML based on your code:
@@ -128,7 +129,7 @@ kubectl patch deployment <name-of-your-kusto-source>-reactivator -n drasi-system
   {"op": "add", "path": "/spec/template/metadata/labels/azure.workload.identity~1use", "value": "true"}
 ]'
 ```
-This step is only necessary for this experimental Kusto Source. In an official Drasi Source, the Source SDK would handle this automatically.
+The step above is only necessary for this experimental Kusto Source. In an official Drasi Source, the Source SDK would handle this automatically.
 
 
 ### Deploying the Continuous Query
@@ -161,4 +162,4 @@ drasi apply -f <your-continuous-query-yaml-file>
 You can also deploy and debug the Kusto Continuous Query using the Drasi VSCode extension.
 
 ## Sample
-A sample Kusto Source and Continuous Query is provided in the `samples` folder.
+A sample Kusto Source and Continuous Query is provided in the `sample-files` folder.
