@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kusto-app-sa
+  namespace: drasi-system
+  annotations:
+    azure.workload.identity/client-id: "<client-id>"
+    azure.workload.identity/tenant-id: "<tenant-id>"

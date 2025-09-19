@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: SourceProvider
+name: Kusto
+spec:
+  services:
+    proxy:
+      image: source-kusto-proxy
+      dapr:
+        app-port: "4002"
+    reactivator:
+      image: source-kusto-reactivator
+      dapr:
+        app-port: "80"
+  config_schema:
+    type: object
+    properties:
+      KUSTO_URI:
+        type: string
+      KUSTO_DATABASE:
+        type: string
+      KUSTO_TABLE:
+        type: string
+      PRIMARY_KEY:
+        type: string
+      USER_MANAGED_IDENTITY:
+        type: string
+      KUSTO_QUERY:
+        type: string
+      POLLING_INTERVAL:
+        type: number
+    required:
+      - KUSTO_URI
+      - KUSTO_DATABASE
+      - PRIMARY_KEY
+      - USER_MANAGED_IDENTITY
+      - KUSTO_QUERY
+      - KUSTO_TABLE

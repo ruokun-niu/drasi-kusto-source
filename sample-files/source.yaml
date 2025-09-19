@@ -1,0 +1,13 @@
+
+apiVersion: v1
+kind: Source
+name: kusto-demo-source
+spec:
+  kind: Kusto
+  properties:
+    KUSTO_URI: https://ruokunkusto.southcentralus.kusto.windows.net
+    KUSTO_DATABASE: MyDatabase
+    KUSTO_TABLE: StormEvents
+    PRIMARY_KEY: EventId
+    KUSTO_QUERY: StormEvents | where State == "NEW YORK" | project-away StormSummary, EventNarrative, EpisodeNarrative 
+    USER_MANAGED_IDENTITY: <client-id>
